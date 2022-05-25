@@ -5,11 +5,13 @@ export enum UserRole {
 }
 
 export interface IUser {
+    fullName: string;
     email: string;
     password: string;
     avatar: string;
     role: UserRole;
-    code?: number;
+    provinceCode?: number;
+    districtCode?: number;
     passwordModified?: Date;
     status: boolean;
 }

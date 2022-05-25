@@ -5,7 +5,10 @@ import express, { Express } from 'express';
 import createHttpError from 'http-errors';
 import { NOT_FOUND } from 'http-status';
 
+import { globalErrorController } from '@/controllers';
+
 import { connectMongoDB } from './mongoDatabase';
+import { loadPassports } from './passport';
 import { connectRedisDB } from './redisDatabase';
 import { loadRoutes } from './routes';
 
@@ -31,6 +34,8 @@ export const loadApp = async (app: Express) => {
 
     app.use(compression());
 
+    loadPassports();
+
     loadRoutes(app);
 
     app.all('*', (req, _res, next) => {
@@ -41,4 +46,6 @@ export const loadApp = async (app: Express) => {
             )
         );
     });
+
+    app.use(globalErrorController);
 };

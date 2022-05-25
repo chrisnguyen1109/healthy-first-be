@@ -17,6 +17,11 @@ const certificateSchema: Schema<CertificateDocument, CertificateModel> =
                 ref: 'Facility',
                 require: [true, 'Certificate must belong to a facility!'],
             },
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+                require: [true, 'Certificate must belong to a user!'],
+            },
             startDate: {
                 type: Date,
             },

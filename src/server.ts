@@ -4,9 +4,7 @@ import express from 'express';
 import { ObjectId } from 'mongoose';
 
 import { PORT } from '@/config';
-
-import { loadApp } from './loaders';
-import { UserDocument } from './models';
+import { UserDocument } from '@/models';
 
 declare global {
     namespace Express {
@@ -20,7 +18,7 @@ declare global {
 
 const app = express();
 
-loadApp(app);
+require('@/loaders').loadApp(app);
 
 process.on('uncaughtException', error => {
     console.log(error.name);

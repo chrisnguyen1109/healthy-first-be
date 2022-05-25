@@ -1,4 +1,5 @@
 import { IFacility } from './facility';
+import { IUser } from './user';
 
 export enum CertificateStatus {
     TESTING = 1,
@@ -24,6 +25,7 @@ export interface InspectedFoods {
 
 export interface ICertificate {
     facility: string | IFacility;
+    user: string | IUser;
     startDate?: Date;
     endDate?: Date;
     isTakeBack: boolean;
