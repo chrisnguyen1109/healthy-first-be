@@ -2,67 +2,65 @@ import { celebrate, Segments } from 'celebrate';
 import { Router } from 'express';
 
 import {
-    createUserController,
-    deleteUserController,
-    getUserController,
-    getUsersController,
-    updateUserController,
+    createFacilityController,
+    deleteFacilityController,
+    getFacilitiesController,
+    getFacilityController,
+    updateFacilityController,
 } from '@/controllers';
-import { checkAuth, checkRole } from '@/middlewares';
-import { UserRole } from '@/types';
+import { checkAuth } from '@/middlewares';
 import {
     schemaAuthAuthorization,
-    schemaGetUsers,
+    schemaFacilityCreate,
+    schemaFacilityUpdate,
+    schemaGetFacilities,
     schemaMongoIdParam,
     schemaRecordQuery,
-    schemaUserCreate,
-    schemaUserUpdate,
 } from '@/validators';
 
-export const userRouter = Router();
+export const facilityRouter = Router();
 
-userRouter.use(
+facilityRouter.use(
     celebrate({
         [Segments.HEADERS]: schemaAuthAuthorization,
     }),
-    checkAuth,
-    checkRole([UserRole.ADMIN, UserRole.MANAGER])
+    checkAuth
 );
 
-userRouter
+facilityRouter
     .route('/')
     .get(
         celebrate({
-            [Segments.QUERY]: schemaGetUsers,
+            [Segments.QUERY]: schemaGetFacilities,
         }),
-        getUsersController
+        getFacilitiesController
     )
     .post(
         celebrate({
-            [Segments.BODY]: schemaUserCreate,
+            [Segments.BODY]: schemaFacilityCreate,
         }),
-        createUserController
+        createFacilityController
     );
 
-userRouter
+facilityRouter
     .route('/:id')
     .get(
         celebrate({
             [Segments.PARAMS]: schemaMongoIdParam,
             [Segments.QUERY]: schemaRecordQuery,
         }),
-        getUserController
+        getFacilityController
     )
     .patch(
         celebrate({
             [Segments.PARAMS]: schemaMongoIdParam,
-            [Segments.BODY]: schemaUserUpdate,
+            [Segments.BODY]: schemaFacilityUpdate,
         }),
-        updateUserController
+        updateFacilityController
     )
     .delete(
         celebrate({
             [Segments.PARAMS]: schemaMongoIdParam,
         }),
-        deleteUserController
+        deleteFacilityController
     );

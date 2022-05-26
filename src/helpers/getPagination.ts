@@ -4,12 +4,11 @@ import { DEFAULT_LIMIT, DEFAULT_PAGE } from '@/config';
 import { Pagination } from '@/types';
 
 export const getPagination = (
-    queryObject: Record<string, any>,
     document: Document[],
-    totalRecords: number
+    totalRecords: number,
+    page: number = DEFAULT_PAGE,
+    limit: number = DEFAULT_LIMIT
 ): Pagination => {
-    const page = +queryObject._page || DEFAULT_PAGE;
-    const limit = +queryObject._limit || DEFAULT_LIMIT;
     const totalPage = Math.ceil(totalRecords / limit);
 
     return {

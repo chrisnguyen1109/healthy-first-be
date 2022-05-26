@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs';
 import createHttpError from 'http-errors';
-import { BAD_REQUEST } from 'http-status';
+import { BAD_REQUEST, CONFLICT, NOT_FOUND } from 'http-status';
 import mongoose, { Document, Model, Schema } from 'mongoose';
 import validator from 'validator';
 
+import { getDistrict, getProvince } from '@/api';
 import { BCRYPT_SALT, DEFAULT_AVATAR } from '@/config';
 import {
     checkMultipleWords,
@@ -107,6 +108,39 @@ const userSchema: Schema<UserDocument, UserModel> = new Schema(
 );
 
 userSchema.pre('save', async function (next) {
+    if (this.isNew && this.role === UserRole.MANAGER) {
+        try {
+            await getProvince(this.provinceCode!);
+        } catch (error) {
+            throw createHttpError(
+                NOT_FOUND,
+                `No province with this code: ${this.provinceCode}`
+            );
+        }
+    }
+
+    if (this.isNew && this.role === UserRole.EXPERT) {
+        let provinceCode: number;
+
+        try {
+            const district = await getDistrict(this.districtCode!);
+
+            provinceCode = district.province_code;
+        } catch (error) {
+            throw createHttpError(
+                NOT_FOUND,
+                `No district with this code: ${this.districtCode}`
+            );
+        }
+
+        if (this.provinceCode !== provinceCode) {
+            throw createHttpError(
+                CONFLICT,
+                'This district code does not match the province code'
+            );
+        }
+    }
+
     if (!this.isModified('password')) return next();
 
     const salt = await bcrypt.genSalt(BCRYPT_SALT);

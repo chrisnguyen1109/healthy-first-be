@@ -1,12 +1,17 @@
 import { Joi } from 'celebrate';
 import validator from 'validator';
 
-import { UserRole } from '@/types';
+import { BusinessType, UserRole } from '@/types';
 
 export const schemaUserRole = Joi.alternatives().try(
     Joi.string().valid(UserRole.ADMIN),
     Joi.string().valid(UserRole.MANAGER),
     Joi.string().valid(UserRole.EXPERT)
+);
+
+export const schemaFacilityType = Joi.alternatives().try(
+    Joi.string().valid(BusinessType.FOOD_PRODUCTION),
+    Joi.string().valid(BusinessType.FOOD_SERVICE)
 );
 
 export const schemaValidMongoId = (msg: string) =>
@@ -36,18 +41,13 @@ export const schemaRecordQuery = Joi.object({
     _fields: [Joi.array().items(Joi.string()), Joi.string()],
 });
 
-export const schemaObjectQuery = (fileds: string[] = []) =>
-    Joi.object({
-        _page: Joi.number().integer().positive(),
-        _limit: Joi.number().integer().positive(),
-        _start: Joi.number().integer().positive(),
-        _end: Joi.number().integer().positive().greater(Joi.ref('_start')),
-        _expand: [Joi.array().items(Joi.string()), Joi.string()],
-        _q: Joi.string(),
-        _sort: [Joi.array().items(Joi.string()), Joi.string()],
-        _fields: [Joi.array().items(Joi.string()), Joi.string()],
-        ...fileds.reduce((acc, cur) => ({ ...acc, [cur]: Joi.number() }), {}),
-    }).pattern(
-        new RegExp(`(${fileds.join('|')})+_(gte|gt|lte|lt|ne)+$`),
-        Joi.number()
-    );
+export const schemaObjectQuery = Joi.object({
+    _page: Joi.number().integer().positive(),
+    _limit: Joi.number().integer().positive(),
+    _start: Joi.number().integer().positive(),
+    _end: Joi.number().integer().positive().greater(Joi.ref('_start')),
+    _expand: [Joi.array().items(Joi.string()), Joi.string()],
+    _q: Joi.string(),
+    _sort: [Joi.array().items(Joi.string()), Joi.string()],
+    _fields: [Joi.array().items(Joi.string()), Joi.string()],
+});

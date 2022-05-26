@@ -3,7 +3,13 @@ import { CREATED, NO_CONTENT, OK } from 'http-status';
 import { RESPONSE_MESSAGE } from '@/config';
 import { catchAsync } from '@/helpers';
 import { UserDocument } from '@/models';
-import { createUser, getUser, getUsers, inactiveUser } from '@/services';
+import {
+    createUser,
+    getUser,
+    getUsers,
+    inactiveUser,
+    updateUser,
+} from '@/services';
 
 export const createUserController = catchAsync<UserDocument>(
     async (req, res) => {
@@ -46,6 +52,25 @@ export const getUserController = catchAsync<UserDocument>(async (req, res) => {
         data,
     });
 });
+
+export const updateUserController = catchAsync<UserDocument>(
+    async (req, res) => {
+        const { id } = req.params;
+
+        const user = await updateUser({
+            currentUser: req.user!,
+            id,
+            body: req.body,
+        });
+
+        res.status(OK).json({
+            message: RESPONSE_MESSAGE,
+            data: {
+                record: user,
+            },
+        });
+    }
+);
 
 export const deleteUserController = catchAsync(async (req, res) => {
     const { id } = req.params;
