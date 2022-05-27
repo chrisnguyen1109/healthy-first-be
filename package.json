@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && cp -r src/config/keys build/config/",
+        "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
         "start": "node build/server.js",
         "dev": "cross-env NODE_ENV=development nodemon",
         "lint": "eslint src/ --quiet",
