@@ -3,7 +3,7 @@ import { NOT_FOUND, OK } from 'http-status';
 import passport from 'passport';
 
 import { RESPONSE_MESSAGE } from '@/config';
-import { catchAsync } from '@/helpers';
+import { catchAsync, setCookieResponse } from '@/helpers';
 import { UserDocument } from '@/models';
 import {
     generateAccessToken,
@@ -11,66 +11,68 @@ import {
     logout,
     verifyRefreshToken,
 } from '@/services';
+import { TokenType } from '@/types';
 
-export const loginController = catchAsync(async (req, res, next) => {
-    passport.authenticate('local', async (error, user: UserDocument) => {
-        if (error) {
-            return next(error);
-        }
+export const loginController = catchAsync<UserDocument>(
+    async (req, res, next) => {
+        passport.authenticate('local', async (error, user: UserDocument) => {
+            if (error) {
+                return next(error);
+            }
 
-        if (!user._id) {
-            return next(
-                createHttpError(
-                    NOT_FOUND,
-                    'This user seems to no longer exists!'
-                )
-            );
-        }
+            if (!user._id) {
+                return next(
+                    createHttpError(
+                        NOT_FOUND,
+                        'This user seems to no longer exists!'
+                    )
+                );
+            }
 
-        const accessToken = await generateAccessToken(user._id);
-        const refreshToken = await generateRefreshToken(user._id);
+            const accessToken = await generateAccessToken(user._id);
+            const refreshToken = await generateRefreshToken(user._id);
 
-        return res.status(OK).json({
-            message: RESPONSE_MESSAGE,
-            data: {
-                user,
-                accessToken,
-                refreshToken,
-            },
-        });
-    })(req, res, next);
-});
+            setCookieResponse(req, res, TokenType.ACCESS_TOKEN, accessToken);
+            setCookieResponse(req, res, TokenType.REFRESH_TOKEN, refreshToken);
 
-export const getMeController = catchAsync(async (req, res) => {
+            return res.status(OK).json({
+                message: RESPONSE_MESSAGE,
+                data: {
+                    record: user,
+                },
+            });
+        })(req, res, next);
+    }
+);
+
+export const getMeController = catchAsync<UserDocument>(async (req, res) => {
     res.status(OK).json({
         message: RESPONSE_MESSAGE,
         data: {
-            user: req.user,
+            record: req.user!,
         },
     });
 });
 
-export const updateMeController = catchAsync(async (req, res) => {
+export const updateMeController = catchAsync<UserDocument>(async (req, res) => {
     const { password, newPassword, ...rest } = req.body;
 
     const updatedUser = await req.user?.updateMe(rest);
 
-    let accessToken: string | undefined;
-    let refreshToken: string | undefined;
-
     if (newPassword && password) {
         await req.user?.updateMyPassword(password, newPassword);
 
-        accessToken = await generateAccessToken(req.user?._id);
-        refreshToken = await generateRefreshToken(req.user?._id);
+        const accessToken = await generateAccessToken(req.user?._id);
+        const refreshToken = await generateRefreshToken(req.user?._id);
+
+        setCookieResponse(req, res, TokenType.ACCESS_TOKEN, accessToken);
+        setCookieResponse(req, res, TokenType.REFRESH_TOKEN, refreshToken);
     }
 
     res.status(OK).json({
         message: RESPONSE_MESSAGE,
         data: {
-            user: updatedUser,
-            accessToken,
-            refreshToken,
+            record: updatedUser!,
         },
     });
 });
@@ -78,22 +80,28 @@ export const updateMeController = catchAsync(async (req, res) => {
 export const logoutController = catchAsync(async (req, res) => {
     await logout(req.user?._id);
 
+    setCookieResponse(req, res, TokenType.ACCESS_TOKEN, null, {
+        expires: new Date(0),
+    });
+    setCookieResponse(req, res, TokenType.REFRESH_TOKEN, null, {
+        expires: new Date(0),
+    });
+
     res.status(OK).json({
         message: RESPONSE_MESSAGE,
     });
 });
 
 export const refreshAccessTokenController = catchAsync(async (req, res) => {
-    const id = await verifyRefreshToken(req.body.refreshToken);
+    const id = await verifyRefreshToken(req.cookies.refresh_token);
 
     const accessToken = await generateAccessToken(id);
     const refreshToken = await generateRefreshToken(id);
 
+    setCookieResponse(req, res, TokenType.ACCESS_TOKEN, accessToken);
+    setCookieResponse(req, res, TokenType.REFRESH_TOKEN, refreshToken);
+
     res.status(OK).json({
         message: RESPONSE_MESSAGE,
-        data: {
-            accessToken,
-            refreshToken,
-        },
     });
 });

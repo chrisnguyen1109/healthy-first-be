@@ -1,5 +1,5 @@
 /* eslint-disable prefer-destructuring */
-export const PORT = process.env.PORT || 3000;
+export const PORT = process.env.PORT || 3001;
 
 export const ENV = process.env.NODE_ENV;
 
@@ -20,6 +20,24 @@ export const REFRESH_TOKEN_PRIVATE_KEY = process.env.REFRESH_TOKEN_PRIVATE_KEY;
 
 export const REFRESH_TOKEN_REDIS_EXPIRE =
     parseInt(process.env.REFRESH_TOKEN_EXPIRE || '1d', 10) * 60 * 60 * 24;
+
+export const ACCESS_TOKEN_COOKIE_EXPIRE = new Date(
+    Date.now() +
+        parseInt(process.env.ACCESS_TOKEN_EXPIRE || '1d', 10) *
+            60 *
+            60 *
+            24 *
+            1000
+);
+
+export const REFRESH_TOKEN_COOKIE_EXPIRE = new Date(
+    Date.now() +
+        parseInt(process.env.REFRESH_TOKEN_EXPIRE || '1d', 10) *
+            60 *
+            60 *
+            24 *
+            1000
+);
 
 export const BCRYPT_SALT = process.env.BCRYPT_SALT
     ? +process.env.BCRYPT_SALT

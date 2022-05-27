@@ -7,7 +7,6 @@
         "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json && cp -r src/config/keys build/config/",
         "start": "node build/server.js",
         "dev": "cross-env NODE_ENV=development nodemon",
-        "prod": "cross-env NODE_ENV=production nodemon",
         "lint": "eslint src/ --quiet",
         "lint:fix": "eslint src/ --fix"
     },

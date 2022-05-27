@@ -7,4 +7,5 @@ export * from './getFilterData';
 export * from './getPagination';
 export * from './omitValueObj';
 export * from './redisKey';
+export * from './setCookieResponse';
 export * from './trimmedStringType';

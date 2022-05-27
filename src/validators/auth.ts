@@ -9,13 +9,11 @@ export const schemaAuthLogin = Joi.object({
 });
 
 export const schemaAuthRefreshToken = Joi.object({
-    refreshToken: Joi.string().required(),
-});
+    refresh_token: Joi.string().required(),
+}).unknown();
 
-export const schemaAuthAuthorization = Joi.object({
-    authorization: Joi.string()
-        .pattern(/^Bearer /)
-        .required(),
+export const schemaAuthAuthentication = Joi.object({
+    access_token: Joi.string().required(),
 }).unknown();
 
 export const schemaAuthUpdateMe = Joi.object({

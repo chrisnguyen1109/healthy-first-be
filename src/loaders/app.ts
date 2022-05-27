@@ -5,6 +5,7 @@ import express, { Express } from 'express';
 import createHttpError from 'http-errors';
 import { NOT_FOUND } from 'http-status';
 
+import { ENV } from '@/config';
 import { globalErrorController } from '@/controllers';
 
 import { connectMongoDB } from './mongoDatabase';
@@ -21,7 +22,14 @@ export const loadApp = async (app: Express) => {
 
     app.enable('trust proxy');
 
-    app.use(cors());
+    if (ENV === 'development') {
+        app.use(
+            cors({
+                origin: 'http://localhost:3000',
+                credentials: true,
+            })
+        );
+    }
 
     app.use(cookieParser());
 
