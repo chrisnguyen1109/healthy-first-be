@@ -23,7 +23,7 @@ export const userRouter = Router();
 
 userRouter.use(
     celebrate({
-        [Segments.HEADERS]: schemaAuthAuthentication,
+        [Segments.COOKIES]: schemaAuthAuthentication,
     }),
     checkAuth,
     checkRole([UserRole.ADMIN, UserRole.MANAGER])

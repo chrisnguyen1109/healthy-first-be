@@ -11,7 +11,9 @@ export interface IUser {
     avatar: string;
     role: UserRole;
     provinceCode?: number;
+    provinceName?: string;
     districtCode?: number;
+    districtName?: string;
     passwordModified?: Date;
     status: boolean;
 }

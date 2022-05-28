@@ -77,6 +77,9 @@ const userSchema: Schema<UserDocument, UserModel> = new Schema(
                 'Province code field must be required!',
             ],
         },
+        provinceName: {
+            ...trimmedStringType,
+        },
         districtCode: {
             type: Number,
             required: [
@@ -85,6 +88,9 @@ const userSchema: Schema<UserDocument, UserModel> = new Schema(
                 },
                 'District code field must be required!',
             ],
+        },
+        districtName: {
+            ...trimmedStringType,
         },
         status: {
             type: Boolean,
@@ -110,7 +116,9 @@ const userSchema: Schema<UserDocument, UserModel> = new Schema(
 userSchema.pre('save', async function (next) {
     if (this.isNew && this.role === UserRole.MANAGER) {
         try {
-            await getProvince(this.provinceCode!);
+            const province = await getProvince(this.provinceCode!);
+
+            this.provinceName = province.name;
         } catch (error) {
             throw createHttpError(
                 NOT_FOUND,
@@ -123,7 +131,13 @@ userSchema.pre('save', async function (next) {
         let provinceCode: number;
 
         try {
-            const district = await getDistrict(this.districtCode!);
+            const [province, district] = await Promise.all([
+                getProvince(this.provinceCode!),
+                getDistrict(this.districtCode!),
+            ]);
+
+            this.provinceName = province.name;
+            this.districtName = district.name;
 
             provinceCode = district.province_code;
         } catch (error) {

@@ -46,8 +46,16 @@ export const getUsers = async (
 
     const [users, totalDataUsers] = await getFilterData<UserDocument>(
         User,
-        queryObject,
-        ['email', 'fullName', 'role', 'districtCode', 'provinceCode']
+        { ...queryObject, _id: { $ne: currentUser._id } },
+        [
+            'email',
+            'fullName',
+            'role',
+            'districtCode',
+            'provinceCode',
+            'districtName',
+            'provinceName',
+        ]
     );
 
     return {

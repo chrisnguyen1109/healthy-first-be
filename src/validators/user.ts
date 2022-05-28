@@ -30,11 +30,11 @@ export const schemaUserCreate = Joi.object({
     role: schemaUserRole.required(),
     provinceCode: schemaRoleCondition(
         [UserRole.MANAGER, UserRole.EXPERT],
-        Joi.number().integer().positive().positive().required()
+        Joi.number().integer().positive().required()
     ),
     districtCode: schemaRoleCondition(
         [UserRole.EXPERT],
-        Joi.number().integer().positive().positive().required()
+        Joi.number().integer().positive().required()
     ),
 });
 
@@ -45,6 +45,8 @@ export const schemaGetUsers = schemaObjectQuery.keys({
     status: Joi.boolean(),
     provinceCode: Joi.number(),
     districtCode: Joi.number(),
+    provinceName: Joi.string(),
+    districtName: Joi.string(),
 });
 
 export const schemaUserUpdate = Joi.object({
