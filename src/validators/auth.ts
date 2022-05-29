@@ -12,10 +12,6 @@ export const schemaAuthRefreshToken = Joi.object({
     refresh_token: Joi.string().required(),
 }).unknown();
 
-export const schemaAuthAuthentication = Joi.object({
-    access_token: Joi.string().required(),
-}).unknown();
-
 export const schemaAuthUpdateMe = Joi.object({
     fullName: Joi.string().custom((val, helpers) =>
         checkMultipleWords(val, 2)

@@ -47,7 +47,7 @@ export const schemaObjectQuery = Joi.object({
     _start: Joi.number().integer().positive(),
     _end: Joi.number().integer().positive().greater(Joi.ref('_start')),
     _expand: [Joi.array().items(Joi.string()), Joi.string()],
-    _q: Joi.string(),
+    _q: Joi.string().allow(''),
     _sort: [Joi.array().items(Joi.string()), Joi.string()],
     _fields: [Joi.array().items(Joi.string()), Joi.string()],
 });

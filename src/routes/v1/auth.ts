@@ -11,7 +11,6 @@ import {
 } from '@/controllers';
 import { checkAuth } from '@/middlewares';
 import {
-    schemaAuthAuthentication,
     schemaAuthLogin,
     schemaAuthRefreshToken,
     schemaAuthUpdateMe,
@@ -36,12 +35,7 @@ authRouter.post(
     refreshAccessTokenController
 );
 
-authRouter.use(
-    celebrate({
-        [Segments.COOKIES]: schemaAuthAuthentication,
-    }),
-    checkAuth
-);
+authRouter.use(checkAuth);
 
 authRouter
     .route('/me')

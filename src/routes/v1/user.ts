@@ -11,7 +11,6 @@ import {
 import { checkAuth, checkRole } from '@/middlewares';
 import { UserRole } from '@/types';
 import {
-    schemaAuthAuthentication,
     schemaGetUsers,
     schemaMongoIdParam,
     schemaRecordQuery,
@@ -21,13 +20,7 @@ import {
 
 export const userRouter = Router();
 
-userRouter.use(
-    celebrate({
-        [Segments.COOKIES]: schemaAuthAuthentication,
-    }),
-    checkAuth,
-    checkRole([UserRole.ADMIN, UserRole.MANAGER])
-);
+userRouter.use(checkAuth, checkRole([UserRole.ADMIN, UserRole.MANAGER]));
 
 userRouter
     .route('/')

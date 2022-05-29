@@ -55,12 +55,10 @@ export const getFacilities = async (
             'owner',
             'address',
             'businessType',
-            'provinceCode',
             'provinceName',
-            'districtCode',
             'districtName',
-            'wardCode',
             'wardName',
+            'phoneNumber',
         ]);
 
     return {

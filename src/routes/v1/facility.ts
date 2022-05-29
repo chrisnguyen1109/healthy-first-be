@@ -10,7 +10,6 @@ import {
 } from '@/controllers';
 import { checkAuth } from '@/middlewares';
 import {
-    schemaAuthAuthentication,
     schemaFacilityCreate,
     schemaFacilityUpdate,
     schemaGetFacilities,
@@ -20,12 +19,7 @@ import {
 
 export const facilityRouter = Router();
 
-facilityRouter.use(
-    celebrate({
-        [Segments.COOKIES]: schemaAuthAuthentication,
-    }),
-    checkAuth
-);
+facilityRouter.use(checkAuth);
 
 facilityRouter
     .route('/')
