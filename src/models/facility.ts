@@ -5,7 +5,7 @@ import validator from 'validator';
 
 import { getDistrict, getProvince, getWard } from '@/api';
 import { omitValueObj, trimmedStringType } from '@/helpers';
-import { BusinessType, IFacility } from '@/types';
+import { BusinessType, FacilityCertificate, IFacility } from '@/types';
 
 export interface FacilityDocument extends IFacility, Document {}
 
@@ -64,6 +64,20 @@ const facilitySchema: Schema<FacilityDocument, FacilityModel> = new Schema(
         },
         description: {
             ...trimmedStringType,
+        },
+        facilityCertificate: {
+            ...trimmedStringType,
+            enum: {
+                values: Object.values(FacilityCertificate),
+                message: `Facility certificate is either: ${Object.values(
+                    FacilityCertificate
+                ).join(', ')}`,
+            },
+            default: FacilityCertificate.NO_CERTIFICATE,
+        },
+        certificate: {
+            type: Schema.Types.ObjectId,
+            ref: 'Certificate',
         },
     },
     {

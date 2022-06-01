@@ -21,7 +21,7 @@ export const setCookieResponse = (
                 : REFRESH_TOKEN_COOKIE_EXPIRE,
         httpOnly: true,
         // secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
-        secure: true,
+        secure: false,
         sameSite: ENV === 'production' ? 'strict' : 'none',
         ...cookieOptions,
     });

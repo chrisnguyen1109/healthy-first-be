@@ -1,7 +1,9 @@
 import { Joi } from 'celebrate';
+import { isFuture } from 'date-fns';
 import validator from 'validator';
 
-import { BusinessType, UserRole } from '@/types';
+import { DATE_FORMAT } from '@/config';
+import { BusinessType, InspectStatus, UserRole } from '@/types';
 
 export const schemaUserRole = Joi.alternatives().try(
     Joi.string().valid(UserRole.ADMIN),
@@ -15,18 +17,16 @@ export const schemaFacilityType = Joi.alternatives().try(
 );
 
 export const schemaValidMongoId = (msg: string) =>
-    Joi.string()
-        .custom((val, helpers) =>
-            validator.isMongoId(val)
-                ? val
-                : helpers.message({
-                      custom: msg,
-                  })
-        )
-        .required();
+    Joi.string().custom((val, helpers) =>
+        validator.isMongoId(val)
+            ? val
+            : helpers.message({
+                  custom: msg,
+              })
+    );
 
 export const schemaMongoIdParam = Joi.object({
-    id: schemaValidMongoId('Param id must be valid Mongo Id'),
+    id: schemaValidMongoId('Param id must be valid Mongo Id').required(),
 });
 
 export const schemaRoleCondition = (roles: UserRole[], schema: any) =>
@@ -50,4 +50,34 @@ export const schemaObjectQuery = Joi.object({
     _q: Joi.string().allow(''),
     _sort: [Joi.array().items(Joi.string()), Joi.string()],
     _fields: [Joi.array().items(Joi.string()), Joi.string()],
+});
+
+export const schemaInspectStatus = Joi.alternatives().try(
+    Joi.string().valid(InspectStatus.FAILURE),
+    Joi.string().valid(InspectStatus.COMPLETED),
+    Joi.string().valid(InspectStatus.PENDING)
+);
+
+export const schemaValidDate = Joi.string().custom((val, helpers) =>
+    validator.isDate(val, { format: DATE_FORMAT })
+        ? val
+        : helpers.message({
+              custom: 'Invalid date format',
+          })
+);
+
+export const schemaFutureDate = Joi.string().custom((val, helpers) => {
+    if (!validator.isDate(val, { format: DATE_FORMAT })) {
+        return helpers.message({
+            custom: 'Invalid date format',
+        });
+    }
+
+    if (!isFuture(new Date(val))) {
+        return helpers.message({
+            custom: 'The date must be in the future',
+        });
+    }
+
+    return val;
 });

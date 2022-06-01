@@ -1,7 +1,7 @@
 import { IFacility } from './facility';
-import { IUser } from './user';
 
 export enum CertificateStatus {
+    INITIAL = 0,
     TESTING = 1,
     SAMPLE = 2,
     ASSESSING = 3,
@@ -25,10 +25,12 @@ export interface InspectedFoods {
 
 export interface ICertificate {
     facility: string | IFacility;
-    user: string | IUser;
+    facilityName: string;
+    provinceCode: number;
+    districtCode: number;
     startDate?: Date;
     endDate?: Date;
-    isTakeBack: boolean;
+    isRevoked: boolean;
     status: CertificateStatus;
     inspectedFoods?: InspectedFoods[];
 }

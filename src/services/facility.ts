@@ -2,8 +2,13 @@ import createHttpError from 'http-errors';
 import { FORBIDDEN, NOT_FOUND } from 'http-status';
 
 import { getFilterData, getPagination, getRecordData } from '@/helpers';
-import { Facility, FacilityDocument, UserDocument } from '@/models';
-import { IFacility, UserRole } from '@/types';
+import {
+    Certificate,
+    Facility,
+    FacilityDocument,
+    UserDocument,
+} from '@/models';
+import { FacilityCertificate, IFacility, UserRole } from '@/types';
 
 export const createFacility = (currentUser: UserDocument, body: IFacility) => {
     if (
@@ -184,4 +189,52 @@ export const deleteFacility = async (currentUser: UserDocument, id: string) => {
     }
 
     return deletedFacility;
+};
+
+export const revokeFacilityCertificate = async (
+    currentUser: UserDocument,
+    id: string
+) => {
+    const updateQuery = (() => {
+        switch (currentUser.role) {
+            case UserRole.MANAGER: {
+                return { provinceCode: currentUser.provinceCode };
+            }
+            case UserRole.EXPERT: {
+                return { districtCode: currentUser.districtCode };
+            }
+            default: {
+                return {};
+            }
+        }
+    })();
+
+    const updatedFacility = await Facility.findOneAndUpdate(
+        {
+            _id: id,
+            ...updateQuery,
+            facilityCertificate: FacilityCertificate.CERTIFIED,
+        },
+        {
+            facilityCertificate: FacilityCertificate.REVOKED,
+        },
+        { new: true }
+    );
+
+    if (!updatedFacility) {
+        throw createHttpError(
+            NOT_FOUND,
+            `No facility with this id: ${id} or you don't have permission to delete this facility`
+        );
+    }
+
+    await Certificate.findByIdAndUpdate(updatedFacility.certificate, {
+        isRevoked: true,
+    });
+
+    updatedFacility.certificate = undefined;
+
+    await updatedFacility.save();
+
+    return updatedFacility;
 };

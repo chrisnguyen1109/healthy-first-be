@@ -6,6 +6,7 @@ import {
     deleteFacilityController,
     getFacilitiesController,
     getFacilityController,
+    revokeFacilityCertificateController,
     updateFacilityController,
 } from '@/controllers';
 import { checkAuth } from '@/middlewares';
@@ -58,3 +59,8 @@ facilityRouter
         }),
         deleteFacilityController
     );
+
+facilityRouter.patch(
+    '/:id/revoke-certificate',
+    revokeFacilityCertificateController
+);

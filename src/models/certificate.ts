@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from 'mongoose';
 
-import { omitValueObj } from '@/helpers';
+import { omitValueObj, trimmedStringType } from '@/helpers';
 import { CertificateStatus, ICertificate } from '@/types';
 
 import { inspectedFoodSchema } from './inspectedFood';
@@ -17,10 +17,17 @@ const certificateSchema: Schema<CertificateDocument, CertificateModel> =
                 ref: 'Facility',
                 require: [true, 'Certificate must belong to a facility!'],
             },
-            user: {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
-                require: [true, 'Certificate must belong to a user!'],
+            facilityName: {
+                ...trimmedStringType,
+                require: [true, 'Facility name field is required!'],
+            },
+            provinceCode: {
+                type: Number,
+                required: [true, 'Province code field is required!'],
+            },
+            districtCode: {
+                type: Number,
+                required: [true, 'District code field is required!'],
             },
             startDate: {
                 type: Date,
@@ -36,9 +43,9 @@ const certificateSchema: Schema<CertificateDocument, CertificateModel> =
                         CertificateStatus
                     ).join(', ')}`,
                 },
-                default: CertificateStatus.TESTING,
+                default: CertificateStatus.INITIAL,
             },
-            isTakeBack: {
+            isRevoked: {
                 type: Boolean,
                 default: false,
             },

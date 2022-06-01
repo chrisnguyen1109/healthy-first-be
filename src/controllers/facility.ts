@@ -8,6 +8,7 @@ import {
     deleteFacility,
     getFacilities,
     getFacility,
+    revokeFacilityCertificate,
     updateFacility,
 } from '@/services';
 
@@ -83,3 +84,18 @@ export const deleteFacilityController = catchAsync(async (req, res) => {
         message: RESPONSE_MESSAGE,
     });
 });
+
+export const revokeFacilityCertificateController = catchAsync<FacilityDocument>(
+    async (req, res) => {
+        const { id } = req.params;
+
+        const facility = await revokeFacilityCertificate(req.user!, id);
+
+        res.status(OK).json({
+            message: RESPONSE_MESSAGE,
+            data: {
+                record: facility,
+            },
+        });
+    }
+);

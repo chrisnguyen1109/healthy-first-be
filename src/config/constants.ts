@@ -46,3 +46,5 @@ export const BCRYPT_SALT = process.env.BCRYPT_SALT
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_LIMIT = 20;
 export const DEFAULT_START_PAGE = 1;
+
+export const DATE_FORMAT = 'MM/dd/yyyy';

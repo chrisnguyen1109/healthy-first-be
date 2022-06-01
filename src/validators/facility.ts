@@ -1,7 +1,13 @@
 import { Joi } from 'celebrate';
 import validator from 'validator';
 
-import { schemaFacilityType, schemaObjectQuery } from './common';
+import { FacilityCertificate } from '@/types';
+
+import {
+    schemaFacilityType,
+    schemaObjectQuery,
+    schemaValidMongoId,
+} from './common';
 
 export const schemaFacilityCreate = Joi.object({
     name: Joi.string().required(),
@@ -34,6 +40,14 @@ export const schemaGetFacilities = schemaObjectQuery.keys({
     provinceCode: Joi.number(),
     districtCode: Joi.number(),
     wardCode: Joi.number(),
+    facilityCertificate: [
+        Joi.string().valid(FacilityCertificate.NO_CERTIFICATE),
+        Joi.string().valid(FacilityCertificate.CERTIFIED),
+        Joi.string().valid(FacilityCertificate.EXPIRED),
+        Joi.string().valid(FacilityCertificate.PENDING),
+        Joi.string().valid(FacilityCertificate.REVOKED),
+    ],
+    certificate: schemaValidMongoId,
 });
 
 export const schemaFacilityUpdate = Joi.object({
