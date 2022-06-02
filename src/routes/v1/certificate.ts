@@ -3,8 +3,10 @@ import { Router } from 'express';
 
 import {
     createCertificateController,
+    downloadCertificateController,
     getCertificateController,
     getCertificatesController,
+    printCertificateController,
     updateCertificateAssessingStepController,
     updateCertificateCompleteStepController,
     updateCertificateFailureStepController,
@@ -93,4 +95,20 @@ certificateRouter.patch(
         [Segments.BODY]: schemaCertificateUpdateFood,
     }),
     updateCertificateFoodController
+);
+
+certificateRouter.post(
+    '/:id/get-certificate',
+    celebrate({
+        [Segments.PARAMS]: schemaMongoIdParam,
+    }),
+    printCertificateController
+);
+
+certificateRouter.get(
+    '/:id/download-certificate',
+    celebrate({
+        [Segments.PARAMS]: schemaMongoIdParam,
+    }),
+    downloadCertificateController
 );

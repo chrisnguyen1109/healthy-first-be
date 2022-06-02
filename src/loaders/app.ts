@@ -4,6 +4,7 @@ import cors from 'cors';
 import express, { Express } from 'express';
 import createHttpError from 'http-errors';
 import { NOT_FOUND } from 'http-status';
+import path from 'path';
 
 import { ENV } from '@/config';
 import { globalErrorController } from '@/controllers';
@@ -43,6 +44,8 @@ export const loadApp = async (app: Express) => {
     app.use(compression());
 
     loadPassports();
+
+    app.use(express.static(path.join(__dirname, '../../public')));
 
     loadRoutes(app);
 

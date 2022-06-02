@@ -1,4 +1,5 @@
 import { CREATED, OK } from 'http-status';
+import path from 'path';
 
 import { RESPONSE_MESSAGE } from '@/config';
 import { catchAsync } from '@/helpers';
@@ -7,6 +8,7 @@ import {
     createCertificate,
     getCertificate,
     getCertificates,
+    printCertificate,
     updateCertificateFood,
     updateCertificateStep,
 } from '@/services';
@@ -182,3 +184,26 @@ export const updateCertificateFoodController = catchAsync<CertificateDocument>(
         });
     }
 );
+
+export const printCertificateController = catchAsync(async (req, res) => {
+    const { id } = req.params;
+
+    const pdfFile = await printCertificate(id, req.user!);
+
+    const url = `${req.protocol}://${req.get('host')}/pdf/${pdfFile}`;
+
+    res.status(OK).json({
+        message: RESPONSE_MESSAGE,
+        data: {
+            url,
+        },
+    });
+});
+
+export const downloadCertificateController = catchAsync(async (req, res) => {
+    const { id } = req.params;
+
+    const pdfFile = await printCertificate(id, req.user!);
+
+    res.download(path.join(__dirname, `../../public/pdf/${pdfFile}`));
+});

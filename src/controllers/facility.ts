@@ -85,16 +85,18 @@ export const deleteFacilityController = catchAsync(async (req, res) => {
     });
 });
 
-export const revokeFacilityCertificateController = catchAsync<FacilityDocument>(
+export const revokeFacilityCertificateController = catchAsync(
     async (req, res) => {
         const { id } = req.params;
 
-        const facility = await revokeFacilityCertificate(req.user!, id);
+        const pdfFile = await revokeFacilityCertificate(req.user!, id);
+
+        const url = `${req.protocol}://${req.get('host')}/pdf/${pdfFile}`;
 
         res.status(OK).json({
             message: RESPONSE_MESSAGE,
             data: {
-                record: facility,
+                url,
             },
         });
     }

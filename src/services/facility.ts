@@ -1,7 +1,13 @@
+import { format } from 'date-fns';
 import createHttpError from 'http-errors';
 import { FORBIDDEN, NOT_FOUND } from 'http-status';
 
-import { getFilterData, getPagination, getRecordData } from '@/helpers';
+import {
+    getFilterData,
+    getPagination,
+    getRecordData,
+    PdfService,
+} from '@/helpers';
 import {
     Certificate,
     Facility,
@@ -228,13 +234,19 @@ export const revokeFacilityCertificate = async (
         );
     }
 
-    await Certificate.findByIdAndUpdate(updatedFacility.certificate, {
-        isRevoked: true,
-    });
+    const certificate = await Certificate.findByIdAndUpdate(
+        updatedFacility.certificate,
+        {
+            isRevoked: true,
+        }
+    );
 
     updatedFacility.certificate = undefined;
 
     await updatedFacility.save();
 
-    return updatedFacility;
+    return new PdfService(certificate?._id, {
+        facilityName: certificate?.facilityName,
+        today: format(new Date(), 'dd LLLL, yyyy'),
+    }).generateRevokedCertificate();
 };

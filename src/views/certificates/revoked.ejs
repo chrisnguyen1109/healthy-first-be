@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .outer-border {
+                width: 690px;
+                height: 1000px;
+                padding: 20px;
+                text-align: center;
+                border: 10px solid #dc3545;
+            }
+
+            .inner-dotted-border {
+                width: 640px;
+                height: 950px;
+                padding: 20px;
+                text-align: center;
+                border: 5px solid #dc3545;
+                border-style: dotted;
+            }
+
+            .certification {
+                font-size: 50px;
+                font-weight: bold;
+                color: #dc3545;
+            }
+
+            .certify {
+                font-size: 25px;
+            }
+
+            .name {
+                font-size: 30px;
+                color: #161c2d;
+            }
+
+            .fs-30 {
+                font-size: 30px;
+            }
+
+            .fs-20 {
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="outer-border">
+            <div class="inner-dotted-border">
+                <span class="certification"
+                    >Decision on Revocation of the Certificate of Eligibility
+                    for Food Safety and Hygiene</span
+                >
+                <br /><br /><br /><br /><br /><br />
+                <span class="certify"
+                    ><i>Thí is the record confirming that</i></span
+                >
+                <br /><br />
+                <span class="name"><b><%= facilityName %></b></span
+                ><br /><br />
+                <span class="certify"
+                    ><i>has been revoked the certification</i></span
+                >
+                <br /><br />
+                <br /><br />
+                <span class="fs-20">for resasons</span>
+                <br /><br />
+                <i
+                    >"Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum."</i
+                >
+                <br /><br /><br /><br />
+                <span class="certify"><i>on</i></span
+                ><br />
+
+                <span class="fs-30"><%= today %></span>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            .outer-border {
+                width: 690px;
+                height: 1000px;
+                padding: 20px;
+                text-align: center;
+                border: 10px solid #dc3545;
+            }
+
+            .inner-dotted-border {
+                width: 640px;
+                height: 950px;
+                padding: 20px;
+                text-align: center;
+                border: 5px solid #dc3545;
+                border-style: dotted;
+            }
+
+            .certification {
+                font-size: 50px;
+                font-weight: bold;
+                color: #dc3545;
+            }
+
+            .certify {
+                font-size: 25px;
+            }
+
+            .name {
+                font-size: 30px;
+                color: #161c2d;
+            }
+
+            .fs-30 {
+                font-size: 30px;
+            }
+
+            .fs-20 {
+                font-size: 20px;
+            }
+            table {
+                border-collapse: collapse;
+                width: 90%;
+                margin: auto;
+            }
+
+            td,
+            th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="outer-border">
+            <div class="inner-dotted-border">
+                <span class="certification"
+                    >Penalties for Facility that do not meet Food Safety and
+                    Hygiene Conditions</span
+                >
+                <br /><br /><br /><br /><br /><br />
+                <span class="certify"
+                    ><i>This is a sanctioning record for</i></span
+                >
+                <br /><br />
+                <span class="name"><b><%= facilityName %></b></span
+                ><br /><br />
+                <span class="certify"
+                    ><i
+                        >has failed to ensure food safety and hygiene
+                        conditions</i
+                    ></span
+                >
+                <br /><br />
+                <h2>Food samples have failed test results</h2>
+
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Result date</th>
+                        <th>Status</th>
+                    </tr>
+                    <% inspectedFoods.forEach(food => { %>
+                    <tr>
+                        <td><%= food.name %></td>
+                        <td><%= food.resultDate %></td>
+                        <td style="color: #dc3545"><%= food.status %></td>
+                    </tr>
+                    <% }) %>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

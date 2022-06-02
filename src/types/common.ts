@@ -25,8 +25,10 @@ export enum TokenType {
     REFRESH_TOKEN = 'refresh_token',
 }
 
-export enum MailTemplate {
-    RESET_PASSWORD = 'reset-password',
+export enum PdfTemplate {
+    CERTIFIED_SUCCESS = 'success',
+    CERTIFIED_FAILURE = 'failure',
+    CERTIFIED_REVOKED = 'revoked',
 }
 
 export enum RedisKey {
