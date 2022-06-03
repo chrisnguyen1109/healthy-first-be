@@ -1,6 +1,5 @@
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import express, { Express } from 'express';
 import createHttpError from 'http-errors';
 import { NOT_FOUND } from 'http-status';
@@ -23,14 +22,14 @@ export const loadApp = async (app: Express) => {
 
     app.enable('trust proxy');
 
-    if (ENV === 'development') {
-        app.use(
-            cors({
-                origin: 'http://localhost:3000',
-                credentials: true,
-            })
-        );
-    }
+    // if (ENV === 'development') {
+    //     app.use(
+    //         cors({
+    //             origin: 'http://localhost:3000',
+    //             credentials: true,
+    //         })
+    //     );
+    // }
 
     app.use(cookieParser());
 
@@ -48,6 +47,12 @@ export const loadApp = async (app: Express) => {
     app.use(express.static(path.join(__dirname, '../../public')));
 
     loadRoutes(app);
+
+    if (ENV === 'production') {
+        app.get('*', (_req, res) => {
+            res.sendFile(path.join(__dirname, '../../public', 'index.html'));
+        });
+    }
 
     app.all('*', (req, _res, next) => {
         next(
