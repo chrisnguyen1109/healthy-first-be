@@ -48,3 +48,13 @@ export const DEFAULT_LIMIT = 20;
 export const DEFAULT_START_PAGE = 1;
 
 export const DATE_FORMAT = 'MM/dd/yyyy';
+
+export const EMAIL_FROM = process.env.EMAIL_FROM;
+
+export const MAILTRAP_HOST = process.env.MAILTRAP_HOST;
+export const MAILTRAP_PORT = parseInt(process.env.MAILTRAP_PORT!, 10);
+export const MAILTRAP_USER = process.env.MAILTRAP_USER;
+export const MAILTRAP_PASS = process.env.MAILTRAP_PASS;
+
+export const SENDGRID_USERNAME = process.env.SENDGRID_USERNAME;
+export const SENDGRID_PASSWORD = process.env.SENDGRID_PASSWORD;

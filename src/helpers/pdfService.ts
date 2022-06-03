@@ -14,7 +14,7 @@ export class PdfService {
     private async generatePdf(template: PdfTemplate) {
         const pathFileEjs = path.join(
             __dirname,
-            `../views/certificates/${template}.ejs`
+            `../../views/certificates/${template}.ejs`
         );
         const pathFilePdf = path.join(
             __dirname,

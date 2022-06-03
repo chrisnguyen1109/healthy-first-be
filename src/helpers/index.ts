@@ -5,6 +5,7 @@ export * from './featureListApi';
 export * from './featureRecordApi';
 export * from './getFilterData';
 export * from './getPagination';
+export * from './mailService';
 export * from './omitValueObj';
 export * from './pdfService';
 export * from './redisKey';

@@ -1,7 +1,7 @@
 import { CREATED, NO_CONTENT, OK } from 'http-status';
 
 import { RESPONSE_MESSAGE } from '@/config';
-import { catchAsync } from '@/helpers';
+import { catchAsync, MailService } from '@/helpers';
 import { UserDocument } from '@/models';
 import {
     createUser,
@@ -14,6 +14,12 @@ import {
 export const createUserController = catchAsync<UserDocument>(
     async (req, res) => {
         const user = await createUser(req.user!, req.body);
+
+        await new MailService(user.email, {
+            subject: 'Welcome to Healthy First',
+            password: req.body.password,
+            url: `${req.protocol}://${req.get('host')}/auth/login`,
+        }).sendWelcomeEmail();
 
         res.status(CREATED).json({
             message: RESPONSE_MESSAGE,

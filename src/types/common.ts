@@ -35,3 +35,7 @@ export enum RedisKey {
     REFRESH_TOKEN = 'rftk',
     RESET_PASSWORD = 'rspwd',
 }
+
+export enum MailTemplate {
+    WELCOME = 'welcome',
+}
